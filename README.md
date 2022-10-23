@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# Breinify Code Challenge
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Introduction:
 
-## Available Scripts
+You will be creating a full stack web application using Node with Express as the backend and React with React-Bootstrap as the frontend to manage a store's mechandise.
 
-In the project directory, you can run:
+### Requirements:
 
-### `npm start`
+#### Backend Requirements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Create an Express server that:
+    - GET: Reads and returns the content from redis.
+    - POST: Creates a new product and writes it to redis, and returns the newly created product content.
+    - PUT: Updates a product and writes it to redis, and returns the updated product content.
+    - DELETE: Deletes the product from redis, and returns the delete product content.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### Frontend Requirements
 
-### `npm test`
+1. A dashboard to show the following in a Product card:
+    - Product Image ( should be a random image ) `productImg`
+    - Product Name `productName`
+    - Description `description`
+    - Creation Time `creationTime`
+2. A filter feature to filter the cards by the product name.
+3. A sorting feature to sort the cards by their `creationTime` in either acsending or desending order.
+4. Add a button to create a new card.
+5. Add a button to delete an existing card.
+6. Add an edit feature to change the card's name (`productName`) and image (`productImg`)
+    > NOTE: Create, edit and delete should fire an AJAX call that will save the data into redis on the Node server.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Environment Requirements
+1. NPM version: `8.1.2`
+2. Node version: `v16.13.1`
 
-### `npm run build`
+### Pre-Requirements
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Please be sure to download [redis](https://download.redis.io/releases/redis-5.0.14.tar.gz). We will be using `redis` to store our cards in the backend.
+    - Start up the `redis-server` on the default port: `6379`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### How to run
+1. `cd` into the `breinify-frontend-challenge` folder
+2. Run `npm run fresh` 
+    - We will be using this command to start your project!
+    - This downloads the necessary dependencies and starts the server (backend) and client (frontend)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Technologies Available:
 
-### `npm run eject`
+-   AJAX calls: `axios` or `fetch`
+-   Helper components: `react-bootstrap`
+-   Styling: `styled-components` or `sass`
+-   You can add other libraries on top of these as well.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Time Limit:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+You will have 1 week to finish this challenge. Once you finish, please push your challenge to Github and share the repository link with us.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Nice to have:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+You may write some unit test for your challenge.
 
-## Learn More
+### Additional Information:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+We added a `"proxy": "http://localhost:5001"` into package.json to help clean up endpoint calls.
