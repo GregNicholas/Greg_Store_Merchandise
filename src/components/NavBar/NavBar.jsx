@@ -1,37 +1,24 @@
 import { useState } from 'react';
-import AddProductForm from '../AddProductForm/AddProductForm'
-// import Container from 'react-bootstrap/Container';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
+import ProductForm from '../ProductForm/ProductForm'
 import { Button, Container, Form, Nav, Navbar, NavDropdown, Offcanvas} from 'react-bootstrap';
-// import Container from 'react-bootstrap/Container';
-// import Form from 'react-bootstrap/Form';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-// import Offcanvas from 'react-bootstrap/Offcanvas';
 
-function NavBar({addProduct}) {
+function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
   const [filterTerm, setFilterTerm] = useState("");
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
+  const [showProductForm, setShowProductForm] = useState(false);
 
-  const handleCloseAddProductForm = () => setShowAddProductForm(false);
-  const handleShowAddProductForm = () => setShowAddProductForm(true);
-
-  const openProductForm = () => {
-    handleShowAddProductForm()
-  }
+  const handleCloseProductForm = () => setShowProductForm(false);
+  const handleShowProductForm = () => setShowProductForm(true);
 
   const filterProducts = e => {
-    console.log("Filter by ", filterTerm);
+    e.preventDefault();
+    setNameFilter(filterTerm);
   }
 
   return (
       
     <Navbar sticky="top" bg="light" expand="md" className="mb-3">
       <Container fluid>
-        <AddProductForm addProduct={addProduct} show={showAddProductForm} handleClose={handleCloseAddProductForm} handleShow={handleShowAddProductForm} />
+        <ProductForm submitProduct={addProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
         <Navbar.Brand href="#">Products Dashboard</Navbar.Brand>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md`} />
         <Navbar.Offcanvas
@@ -46,14 +33,16 @@ function NavBar({addProduct}) {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Button onClick={openProductForm} variant="outline-primary">Add Product</Button>{' '}
+              <Button onClick={handleShowProductForm} variant="outline-primary">Add Product</Button>{' '}
               <NavDropdown
                 title="Sort"
                 id={`offcanvasNavbarDropdown-expand-md`}
               >
-                <NavDropdown.Item onClick={() => console.log("sort descending")}>Ascending</NavDropdown.Item>
+                <NavDropdown.Item onClick={() => setSortDirection("ascending")}>
+                  Ascending
+                </NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item onClick={() => console.log("sort descending")}>
+                <NavDropdown.Item onClick={() => setSortDirection("descending")}>
                   Descending
                 </NavDropdown.Item>
               </NavDropdown>
@@ -64,8 +53,9 @@ function NavBar({addProduct}) {
                 placeholder="Filter by product name"
                 className="me-2"
                 aria-label="Filter"
-                value={filterTerm}
-                onChange={(e) => setFilterTerm(e.target.value)}
+                value={nameFilter}
+                onChange={(e) => setNameFilter(e.target.value)}
+                // onChange={(e) => setFilterTerm(e.target.value)}
               />
               <Button variant="outline-success">Filter</Button>
             </Form>

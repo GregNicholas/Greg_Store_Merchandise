@@ -7,11 +7,23 @@ import { nanoid } from 'nanoid'
 const IMGURL = "https://picsum.photos/id/";
 const IMGURLTAIL = "/286/180.jpg";
 
-function AddProductForm({ addProduct, show, handleClose}) {
+function ProductForm({ oldProduct=null, submitProduct, show, handleClose}) {
+  console.log(oldProduct?.productName, oldProduct?.id)
+  // const [newProductInfo, setNewProductInfo] = useState( oldProduct ? 
+  //   {
+  //   productName: oldProduct.productName,
+  //   description: oldProduct.description
+  //   } : 
+  //   {
+  //     productName: "",
+  //     description: "",
+  //   }
+  // )
+
   const [newProductInfo, setNewProductInfo] = useState({
-            productName: "",
-            description: "",
-          })
+    productName: oldProduct ? oldProduct.productName : "",
+    description: oldProduct ? oldProduct.description : "",
+  })
 
   const handleInputChange = e => {
     const { name, value } = e.target;
@@ -24,20 +36,20 @@ function AddProductForm({ addProduct, show, handleClose}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const date = new Date();
     const randomIndex = Math.floor(Math.random()*1020);
     const newProductImg = `${IMGURL}${randomIndex}${IMGURLTAIL}`;
     const newCreationTime = new Date();
 
     const newProduct = {
-      id: nanoid(),
+      id: oldProduct ? oldProduct.id : nanoid(),
       productImg: newProductImg,
       productName: newProductInfo.productName, 
       description: newProductInfo.description,
-      creationTime: newCreationTime
+      creationTime: oldProduct ? oldProduct.creationTime : newCreationTime
     }
-    
-    addProduct(newProduct);
+    console.log(newProduct)
+    submitProduct(newProduct);
+    !oldProduct && setNewProductInfo({productName: "", description: ""})
     handleClose();
   }
 
@@ -45,7 +57,7 @@ function AddProductForm({ addProduct, show, handleClose}) {
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Product</Modal.Title>
+          <Modal.Title>{oldProduct ? "Edit" : "Add"} Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
@@ -74,19 +86,13 @@ function AddProductForm({ addProduct, show, handleClose}) {
               />
             </Form.Group>
             <Button type="submit" variant="primary">
-              Add
+              Submit
             </Button>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          
-        </Modal.Footer>
       </Modal>
     </>
   );
 }
 
-export default AddProductForm
+export default ProductForm
