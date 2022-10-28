@@ -29,12 +29,10 @@ export function Home() {
 // sort or filter when changes made
 	useEffect(() => {
 		if(!nameFilter) {
-			console.log("sort")
 			const newList = [...products]
 			sortByDate(newList, sortDirection)
 			setDisplayedProducts(newList)
 		} else if(nameFilter){
-			console.log("sort, filter")
 		  	const newList = [...products].filter(p => p.productName.includes(nameFilter))
 			sortByDate(newList, sortDirection)
 		  	setDisplayedProducts(newList)
@@ -61,7 +59,7 @@ export function Home() {
 
 	const editProduct = async (product, oldProduct) => {
 		try {
-			const {data} = await axios.put("/editProduct", { product, oldProduct })
+			const {data} = await axios.put(`/editProduct/${oldProduct.id}`, { product, oldProduct })
 			const updatedProducts = data.map(JSON.parse);
 			setProducts(updatedProducts);
 		}catch(err){
@@ -71,7 +69,7 @@ export function Home() {
 
 	const deleteProduct = async (product) => {
 		try {
-			const {data} = await axios.delete("/deleteProduct", { data: product });
+			const {data} = await axios.delete(`/deleteProduct/${product.id}`, { data: product });
 			
 			if(data.length > 0){
 				const updatedProducts = data.map(JSON.parse);

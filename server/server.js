@@ -41,14 +41,14 @@ app.post('/createCard', async (req, res) => {
 	res.send(updatedCards);
 })
 
-app.put('/editProduct/', async (req, res) => {
+app.put('/editProduct/:id', async (req, res) => {
 	await client.lRem("products", 1, JSON.stringify(req.body.oldProduct));
 	await client.lPush("products", JSON.stringify(req.body.product));
 	const updatedCards = await client.lRange("products", 0, -1);
 	res.send(updatedCards);
 })
 
-app.delete('/deleteProduct/', async (req, res) => {
+app.delete('/deleteProduct/:id', async (req, res) => {
 	await client.lRem("products", 1, JSON.stringify(req.body));
 	const updatedCards = await client.lRange("products", 0, -1)
 	res.send(updatedCards);
