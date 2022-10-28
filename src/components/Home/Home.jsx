@@ -2,34 +2,43 @@ import { useState, useEffect } from 'react';
 import NavBar from '../NavBar/NavBar';
 import DisplayArea from '../DisplayArea/DisplayArea';
 import ProductCard from '../ProductCard/ProductCard';
-import { Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 
 export function Home() {
 	const [products, setProducts] = useState([])
-	const [sortDirection, setSortDirection] = useState(null)
+	const [sortDirection, setSortDirection] = useState('descending')
 	const [nameFilter, setNameFilter] = useState("")
 	const [displayedProducts, setDisplayedProducts] = useState([])
 
-	// useEffect(() => {
-	// 	setDisplayedProducts([...products])
-	// },[products])
-
+// get products from redis when loading page
 	useEffect(() => {
-		if(nameFilter && !sortDirection){
-		  	const newList = [...products].filter(p => p.productName.includes(nameFilter))
-		  	setDisplayedProducts(newList)
-		} else if(sortDirection && !nameFilter) {
+		const fetchProducts = async () => {
+			try {
+				const data = await axios.get("/getCards")
+				if(data.data.length > 0){
+					const productsInfo = data.data.map(JSON.parse);
+					setProducts(productsInfo);
+				}
+			}catch(err){
+				console.log("ERROR getting products: ", err)
+			}
+		}
+		fetchProducts()
+	},[])
+
+// sort or filter when changes made
+	useEffect(() => {
+		if(!nameFilter) {
+			console.log("sort")
 			const newList = [...products]
 			sortByDate(newList, sortDirection)
 			setDisplayedProducts(newList)
-		} else if(sortDirection && nameFilter){
+		} else if(nameFilter){
+			console.log("sort, filter")
 		  	const newList = [...products].filter(p => p.productName.includes(nameFilter))
 			sortByDate(newList, sortDirection)
 		  	setDisplayedProducts(newList)
-		}else if(!nameFilter && !sortDirection) {
-		  setDisplayedProducts(products)
 		}
-	  
 	}, [nameFilter, sortDirection, products])
 
 	const sortByDate = (list, order) => {
@@ -40,25 +49,40 @@ export function Home() {
 		}
 	}
 
-	const addProduct = (product) => {
-		setProducts(prev => [product, ...prev])
+	const addProduct = async (product) => {
+		try {
+			const {data} = await axios.post("/createCard", product);
+			const updatedProducts = data.map(JSON.parse);
+			setProducts(updatedProducts);
+		}catch(err){
+			console.log("ADD error: ", err);
+		}
 	}
 
-	const editProduct = (product) => {
-		const newProducts = products.map(p => {
-			if(p.id === product.id) {
-				return product
+	const editProduct = async (product, oldProduct) => {
+		try {
+			const {data} = await axios.put("/editProduct", { product, oldProduct })
+			const updatedProducts = data.map(JSON.parse);
+			setProducts(updatedProducts);
+		}catch(err){
+			console.log("EDIT error: ", err);
+		}
+	}
+
+	const deleteProduct = async (product) => {
+		try {
+			const {data} = await axios.delete("/deleteProduct", { data: product });
+			
+			if(data.length > 0){
+				const updatedProducts = data.map(JSON.parse);
+				setProducts(updatedProducts);
 			} else {
-				return p
+				setProducts([]);
 			}
-		})
-		setProducts(newProducts)
-	}
-
-	const deleteProduct = (id) => {
-		setProducts(prev => {
-			return prev.filter(p => p.id !== id)
-		})
+			
+		}catch(err){
+			console.log("DELETE error: ", err);
+		}
 	} 
 
 	const productDisplay = displayedProducts.map(p => {
@@ -68,11 +92,9 @@ export function Home() {
 	return (
 		<div>
 			<NavBar addProduct={addProduct} setSortDirection={setSortDirection} nameFilter={nameFilter} setNameFilter={setNameFilter} />
-			{/* <h1>Breinify Code Challenge</h1> */}
 			<DisplayArea >
 				{productDisplay}
 			</DisplayArea>
-			
 		</div>
 	);
 }

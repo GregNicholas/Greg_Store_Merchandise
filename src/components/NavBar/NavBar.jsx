@@ -1,25 +1,20 @@
 import { useState } from 'react';
-import ProductForm from '../ProductForm/ProductForm'
+import ProductForm from '../ProductForm/ProductForm';
 import { Button, Container, Form, Nav, Navbar, NavDropdown, Offcanvas} from 'react-bootstrap';
+import styled from 'styled-components';
 
 function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
-  const [filterTerm, setFilterTerm] = useState("");
   const [showProductForm, setShowProductForm] = useState(false);
 
   const handleCloseProductForm = () => setShowProductForm(false);
   const handleShowProductForm = () => setShowProductForm(true);
 
-  const filterProducts = e => {
-    e.preventDefault();
-    setNameFilter(filterTerm);
-  }
-
   return (
       
-    <Navbar sticky="top" bg="light" expand="md" className="mb-3">
+    <Navbar sticky="top" bg="light" expand="md">
       <Container fluid>
         <ProductForm submitProduct={addProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
-        <Navbar.Brand href="#">Products Dashboard</Navbar.Brand>
+        <NavHeading className="nav-heading">Products Dashboard</NavHeading>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md`} />
         <Navbar.Offcanvas
           id={`offcanvasNavbar-expand-md`}
@@ -33,9 +28,9 @@ function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Button onClick={handleShowProductForm} variant="outline-primary">Add Product</Button>{' '}
-              <NavDropdown
-                title="Sort"
+              <AddButton onClick={handleShowProductForm} variant="outline-primary">Add Product</AddButton>{' '}
+              <NavDropdownStyled
+                title="Date Sort"
                 id={`offcanvasNavbarDropdown-expand-md`}
               >
                 <NavDropdown.Item onClick={() => setSortDirection("ascending")}>
@@ -45,9 +40,9 @@ function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
                 <NavDropdown.Item onClick={() => setSortDirection("descending")}>
                   Descending
                 </NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdownStyled>
             </Nav>
-            <Form className="d-flex" onSubmit={filterProducts}>
+            <Form className="d-flex">
               <Form.Control
                 type="text"
                 placeholder="Filter by product name"
@@ -55,9 +50,8 @@ function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
                 aria-label="Filter"
                 value={nameFilter}
                 onChange={(e) => setNameFilter(e.target.value)}
-                // onChange={(e) => setFilterTerm(e.target.value)}
               />
-              <Button variant="outline-success">Filter</Button>
+              <ClearButton onClick={() => setNameFilter('')} variant="outline-success">Clear</ClearButton>
             </Form>
           </Offcanvas.Body>
         </Navbar.Offcanvas>
@@ -66,6 +60,40 @@ function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
   );
 }
 
-
-
 export default NavBar;
+
+
+const NavHeading = styled(Navbar.Brand)`
+  font-weight: bold;
+  color: #0b547d;
+  &:hover {
+    color: #0b547d;
+  }
+`
+
+const AddButton = styled(Button)`
+  color: #0b547d;
+  border: 1px solid #0b547d;
+  &:hover {
+    background: #0b547d;
+    border: 1px solid #0b547d;
+    color: #f8f8ff;
+  }
+`;
+
+const ClearButton = styled(Button)`
+  color: #f68874;
+  border: 1px solid #f68874;
+  &:hover {
+    background: #f68874;
+    border: 1px solid #f68874;
+    color: #f8f8ff;
+  }
+`;
+
+const NavDropdownStyled = styled(NavDropdown)`
+  margin-left: 1rem;
+  @media (max-width: 768px) {
+    margin: 1rem 0;
+  }
+`

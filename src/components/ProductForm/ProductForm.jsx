@@ -4,22 +4,10 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import { nanoid } from 'nanoid'
 
-const IMGURL = "https://picsum.photos/id/";
-const IMGURLTAIL = "/286/180.jpg";
+const IMGURL = "https://picsum.photos/seed/";
+const IMGURLTAIL = "/286/180";
 
-function ProductForm({ oldProduct=null, submitProduct, show, handleClose}) {
-  console.log(oldProduct?.productName, oldProduct?.id)
-  // const [newProductInfo, setNewProductInfo] = useState( oldProduct ? 
-  //   {
-  //   productName: oldProduct.productName,
-  //   description: oldProduct.description
-  //   } : 
-  //   {
-  //     productName: "",
-  //     description: "",
-  //   }
-  // )
-
+function ProductForm({ oldProduct=null, submitProduct, editProduct, show, handleClose}) {
   const [newProductInfo, setNewProductInfo] = useState({
     productName: oldProduct ? oldProduct.productName : "",
     description: oldProduct ? oldProduct.description : "",
@@ -36,9 +24,10 @@ function ProductForm({ oldProduct=null, submitProduct, show, handleClose}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const randomIndex = Math.floor(Math.random()*1020);
+    const randomIndex = nanoid();
     const newProductImg = `${IMGURL}${randomIndex}${IMGURLTAIL}`;
-    const newCreationTime = new Date();
+    const currentDate = new Date();
+    const newCreationTime = currentDate.getTime();
 
     const newProduct = {
       id: oldProduct ? oldProduct.id : nanoid(),
@@ -47,9 +36,14 @@ function ProductForm({ oldProduct=null, submitProduct, show, handleClose}) {
       description: newProductInfo.description,
       creationTime: oldProduct ? oldProduct.creationTime : newCreationTime
     }
-    console.log(newProduct)
-    submitProduct(newProduct);
-    !oldProduct && setNewProductInfo({productName: "", description: ""})
+
+    if(!oldProduct){
+      submitProduct(newProduct);
+      !oldProduct && setNewProductInfo({productName: "", description: ""})
+    } else{
+      editProduct(newProduct, oldProduct)
+    }
+    
     handleClose();
   }
 
@@ -70,6 +64,7 @@ function ProductForm({ oldProduct=null, submitProduct, show, handleClose}) {
                 value={newProductInfo.productName}
                 placeholder="product name"
                 autoFocus
+                required
               />
             </Form.Group>
             <Form.Group
@@ -83,6 +78,7 @@ function ProductForm({ oldProduct=null, submitProduct, show, handleClose}) {
                 name="description"
                 onChange={handleInputChange}
                 value={newProductInfo.description}
+                required
               />
             </Form.Group>
             <Button type="submit" variant="primary">
