@@ -14,9 +14,10 @@ export function Home() {
 	useEffect(() => {
 		const fetchProducts = async () => {
 			try {
-				const data = await axios.get("/getCards")
-				if(data.data.length > 0){
-					const productsInfo = data.data.map(JSON.parse);
+				const { data } = await axios.get("/getProducts")
+				console.log(data)
+				if(data.length > 0){
+					const productsInfo = data;
 					setProducts(productsInfo);
 				}
 			}catch(err){
@@ -50,8 +51,7 @@ export function Home() {
 	const addProduct = async (product) => {
 		try {
 			const {data} = await axios.post("/createCard", product);
-			const updatedProducts = data.map(JSON.parse);
-			setProducts(updatedProducts);
+			setProducts(data);
 		}catch(err){
 			console.log("ADD error: ", err);
 		}
@@ -60,8 +60,7 @@ export function Home() {
 	const editProduct = async (product, oldProduct) => {
 		try {
 			const {data} = await axios.put(`/editProduct/${oldProduct.id}`, { product, oldProduct })
-			const updatedProducts = data.map(JSON.parse);
-			setProducts(updatedProducts);
+			setProducts(data);
 		}catch(err){
 			console.log("EDIT error: ", err);
 		}
@@ -72,8 +71,7 @@ export function Home() {
 			const {data} = await axios.delete(`/deleteProduct/${product.id}`, { data: product });
 			
 			if(data.length > 0){
-				const updatedProducts = data.map(JSON.parse);
-				setProducts(updatedProducts);
+				setProducts(data);
 			} else {
 				setProducts([]);
 			}
