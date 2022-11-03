@@ -1,16 +1,29 @@
+import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
-const DisplayArea = ({ children }) => {
+const DisplayArea = ({ children, loadingStatus }) => {
+  const [isShown, setIsShown] = useState(false);
+
+  useEffect(() => {
+    if(!children.length && loadingStatus.status === ''){
+      setTimeout(() => {
+        setIsShown(true)
+      },800)
+    }
+  },[children, loadingStatus.status])
+console.log(isShown)
   return (
     <Container>
       <CardsDisplay>
-        {children.length ? children : <EmptyList><p>Nothing to show</p>Use the menu to add some products</EmptyList>}
+        {(loadingStatus.status === '' && children.length) && children }
+        {loadingStatus.status === 'loading' && <div>LOADING...</div>}
+        {loadingStatus.status === 'error' && <div>Error {loadingStatus.error.message}</div>}
+        {(loadingStatus.status === '' && !children.length && isShown) && <EmptyList><p>Nothing to show</p>Use the menu to add some products</EmptyList>}
       </CardsDisplay>
     </Container>
   )
 }
 export default DisplayArea
-
 
 const Container = styled.main`
   max-width: 1200px;
