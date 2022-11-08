@@ -4,6 +4,7 @@ import styled, { keyframes } from "styled-components";
 const DisplayArea = ({ children, loadingStatus }) => {
   const [isShown, setIsShown] = useState(false);
 
+  // work around for empty list message flashing. look into other fix
   useEffect(() => {
     if(!children.length && loadingStatus.status === ''){
       setTimeout(() => {
@@ -11,7 +12,7 @@ const DisplayArea = ({ children, loadingStatus }) => {
       },800)
     }
   },[children, loadingStatus.status])
-console.log(isShown)
+
   return (
     <Container>
       <CardsDisplay>

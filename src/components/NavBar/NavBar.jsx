@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import ProductForm from '../ProductForm/ProductForm';
+import { useState, useContext } from 'react';
+import FormModal from '../FormModal/FormModal';
+import { Context } from "../../contexts/Context";
 import { Button, Container, Form, Nav, Navbar, NavDropdown, Offcanvas} from 'react-bootstrap';
 import styled from 'styled-components';
 
-function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
+function NavBar({ nameFilter, setNameFilter, setSortDirection }) {
   const [showProductForm, setShowProductForm] = useState(false);
+
+  const { addProduct } = useContext(Context);
 
   const handleCloseProductForm = () => setShowProductForm(false);
   const handleShowProductForm = () => setShowProductForm(true);
@@ -13,7 +16,7 @@ function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
       
     <Navbar sticky="top" bg="light" expand="md">
       <Container fluid>
-        <ProductForm submitProduct={addProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
+        <FormModal submitProduct={addProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
         <NavHeading className="nav-heading">Products Dashboard</NavHeading>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md`} />
         <Navbar.Offcanvas
@@ -49,7 +52,7 @@ function NavBar({ addProduct, nameFilter, setNameFilter, setSortDirection }) {
                 className="me-2"
                 aria-label="Filter"
                 value={nameFilter}
-                onChange={(e) => setNameFilter(e.target.value)}
+                onChange={(e) => setNameFilter(e.target.vfalue)}
               />
               <ClearButton onClick={() => setNameFilter('')} variant="outline-success">Clear</ClearButton>
             </Form>

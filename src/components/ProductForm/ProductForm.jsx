@@ -1,60 +1,53 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 import { nanoid } from 'nanoid'
 
 const IMGURL = "https://picsum.photos/seed/";
 const IMGURLTAIL = "/286/180";
 
-function ProductForm({ oldProduct=null, submitProduct, editProduct, show, handleClose}) {
-  const [newProductInfo, setNewProductInfo] = useState({
-    productName: oldProduct ? oldProduct.productName : "",
-    description: oldProduct ? oldProduct.description : "",
-  })
+// function ProductForm({ handleSubmit, handleInputChange, newProductInfo }) {
+  function ProductForm({ oldProduct=null, submitProduct, handleClose }) {
+    const [newProductInfo, setNewProductInfo] = useState({
+      productName: oldProduct ? oldProduct.productName : "",
+      description: oldProduct ? oldProduct.description : "",
+    })
 
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-
-    setNewProductInfo({
-      ...newProductInfo,
-      [name]: value,
-    });
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const randomIndex = nanoid();
-    const newProductImg = `${IMGURL}${randomIndex}${IMGURLTAIL}`;
-    const currentDate = new Date();
-    const newCreationTime = currentDate.getTime();
-
-    const newProduct = {
-      id: oldProduct ? oldProduct.id : nanoid(),
-      productImg: newProductImg,
-      productName: newProductInfo.productName, 
-      description: newProductInfo.description,
-      creationTime: oldProduct ? oldProduct.creationTime : newCreationTime
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setNewProductInfo({
+        ...newProductInfo,
+        [name]: value,
+      });
     }
 
-    if(!oldProduct){
-      submitProduct(newProduct);
-      !oldProduct && setNewProductInfo({productName: "", description: ""})
-    } else{
-      editProduct(newProduct, oldProduct)
-    }
-    
-    handleClose();
-  }
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const randomIndex = nanoid();
+      const newProductImg = `${IMGURL}${randomIndex}${IMGURLTAIL}`;
+      const currentDate = new Date();
+      const newCreationTime = currentDate.getTime();
 
-  return (
-    <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{oldProduct ? "Edit" : "Add"} Product</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
+      const newProduct = {
+        id: oldProduct ? oldProduct.id : nanoid(),
+        productImg: newProductImg,
+        productName: newProductInfo.productName, 
+        description: newProductInfo.description,
+        creationTime: oldProduct ? oldProduct.creationTime : newCreationTime
+      }
+
+      if(!oldProduct){
+        submitProduct(newProduct);
+        setNewProductInfo({productName: "", description: ""})
+      } else{
+        submitProduct(newProduct, oldProduct)
+      }
+      
+        handleClose();
+    }
+
+    return (
+        <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Product Name</Form.Label>
               <Form.Control
@@ -85,10 +78,7 @@ function ProductForm({ oldProduct=null, submitProduct, editProduct, show, handle
               Submit
             </Button>
           </Form>
-        </Modal.Body>
-      </Modal>
-    </>
-  );
+    )
 }
 
 export default ProductForm

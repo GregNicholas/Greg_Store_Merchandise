@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import ProductForm from '../ProductForm/ProductForm';
+import { useState, useContext } from 'react';
+import FormModal from '../FormModal/FormModal';
+import { Context } from "../../contexts/Context";
 import { Card, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const ProductCard = ({ product, editProduct, deleteProduct }) => {
+const ProductCard = ({ product }) => {
   const [showProductForm, setShowProductForm] = useState(false);
+  const { editProduct, deleteProduct } = useContext(Context);
+
   const creationTime = new Date(product.creationTime)
 
   const handleCloseProductForm = () => setShowProductForm(false);
@@ -12,7 +15,7 @@ const ProductCard = ({ product, editProduct, deleteProduct }) => {
 
   return (
     <Card style={{ width: '18rem' }}>
-        <ProductForm oldProduct={product} editProduct={editProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
+        <FormModal oldProduct={product} submitProduct={editProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
         <CardImg variant="top" src={product.productImg} />
         <CardBody>
             <CardTitle>{product.productName}</CardTitle>
