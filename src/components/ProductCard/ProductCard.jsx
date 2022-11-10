@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
 export default ProductCard
 
 const CardBody = styled(Card.Body)`
-  margin-bottom: 40px;
+  margin-bottom: 4rem;
   min-height:180px;
   max-height: 250px;
   overflow: scroll;

@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
 import FormModal from '../FormModal/FormModal';
 import { Context } from "../../contexts/Context";
+import { useNavigate } from 'react-router-dom';
 import { Button, Container, Form, Nav, Navbar, NavDropdown, Offcanvas} from 'react-bootstrap';
 import styled from 'styled-components';
 
@@ -8,6 +9,12 @@ function NavBar({ nameFilter, setNameFilter, setSortDirection }) {
   const [showProductForm, setShowProductForm] = useState(false);
 
   const { addProduct } = useContext(Context);
+
+  const navigate = useNavigate();
+
+  const goToDeleteMore = () => {
+    navigate('/deleteMore')
+  }
 
   const handleCloseProductForm = () => setShowProductForm(false);
   const handleShowProductForm = () => setShowProductForm(true);
@@ -31,6 +38,7 @@ function NavBar({ nameFilter, setNameFilter, setSortDirection }) {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
+              <Button onClick={goToDeleteMore} variant="outline-danger">Del</Button>
               <AddButton onClick={handleShowProductForm} variant="outline-primary">Add Product</AddButton>{' '}
               <NavDropdownStyled
                 title="Date Sort"
@@ -52,7 +60,7 @@ function NavBar({ nameFilter, setNameFilter, setSortDirection }) {
                 className="me-2"
                 aria-label="Filter"
                 value={nameFilter}
-                onChange={(e) => setNameFilter(e.target.vfalue)}
+                onChange={(e) => setNameFilter(e.target.value)}
               />
               <ClearButton onClick={() => setNameFilter('')} variant="outline-success">Clear</ClearButton>
             </Form>

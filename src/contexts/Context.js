@@ -30,6 +30,7 @@ function ContextProvider({ children }) {
             }));
             // use data from the last product to set data in the display
             // might be better to getProducts after the promises are fulfilled
+			// or possibly make a new route in the server and edit this
             setProducts(results[results.length-1].data);
             setLoadingStatus({status: '', error: ''});
             }catch(err){
@@ -67,6 +68,24 @@ function ContextProvider({ children }) {
 		}
 	} 
 
+	const deleteMultipleProducts = async (products) => {
+		setLoadingStatus({status: 'loading', error: ''});
+		
+		try {
+			const {data} = await axios.delete('/deleteMultipleProducts', { data: products });
+
+			if(data.length > 0){
+				setProducts(data);
+			} else {
+				setProducts([]);
+			}
+			setLoadingStatus({status: '', error: ''});
+		}catch(err){
+			console.log("delete multiple error: ", err);
+			setLoadingStatus({status: 'error', error: err});
+		}
+	}
+
     useEffect(() => {
 		const fetchProducts = async () => {
 			setLoadingStatus({status: 'loading', error: ''});
@@ -95,6 +114,7 @@ function ContextProvider({ children }) {
                 addMultipleProducts,
                 editProduct,
                 deleteProduct,
+				deleteMultipleProducts,
             }}
         >
         {children}
