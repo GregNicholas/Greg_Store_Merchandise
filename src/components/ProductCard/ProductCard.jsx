@@ -1,37 +1,11 @@
-import { useState } from 'react';
-import ProductForm from '../ProductForm/ProductForm';
+import { useState, useContext } from 'react';
+import FormModal from '../FormModal/FormModal';
+import { Context } from "../../contexts/Context";
 import { Card, Button } from 'react-bootstrap';
 import styled from 'styled-components';
 
-const ProductCard = ({ product, editProduct, deleteProduct }) => {
-  const [showProductForm, setShowProductForm] = useState(false);
-  const creationTime = new Date(product.creationTime)
-
-  const handleCloseProductForm = () => setShowProductForm(false);
-  const handleShowProductForm = () => setShowProductForm(true);
-
-  return (
-    <Card style={{ width: '18rem' }}>
-        <ProductForm oldProduct={product} editProduct={editProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
-        <CardImg variant="top" src={product.productImg} />
-        <CardBody>
-            <CardTitle>{product.productName}</CardTitle>
-            <Card.Text>{product.description}</Card.Text>
-            <CardFooter>
-              <CreationDate>Added {creationTime.toLocaleTimeString()}, {creationTime.toLocaleDateString()}</CreationDate>
-              <ButtonContainer>
-                <EditButton onClick={handleShowProductForm} variant="outline-primary">Edit</EditButton>
-                <DeleteButton onClick={() => deleteProduct(product)} align="end" variant="outline-danger">Delete</DeleteButton>
-              </ButtonContainer>
-            </CardFooter>
-        </CardBody>
-    </Card>
-  )
-}
-export default ProductCard
-
 const CardBody = styled(Card.Body)`
-  margin-bottom: 40px;
+  margin-bottom: 4rem;
   min-height:180px;
   max-height: 250px;
   overflow: scroll;
@@ -88,3 +62,32 @@ const CreationDate = styled(Card.Text)`
   margin-bottom: 5px;
   text-align: right;
 `;
+
+const ProductCard = ({ product }) => {
+  const [showProductForm, setShowProductForm] = useState(false);
+  const { editProduct, deleteProduct } = useContext(Context);
+
+  const creationTime = new Date(product.creationTime)
+
+  const handleCloseProductForm = () => setShowProductForm(false);
+  const handleShowProductForm = () => setShowProductForm(true);
+
+  return (
+    <Card style={{ width: '18rem' }}>
+        <FormModal oldProduct={product} submitProduct={editProduct} show={showProductForm} handleClose={handleCloseProductForm} handleShow={handleShowProductForm} />
+        <CardImg variant="top" src={product.productImg} />
+        <CardBody>
+            <CardTitle>{product.productName}</CardTitle>
+            <Card.Text>{product.description}</Card.Text>
+            <CardFooter>
+              <CreationDate>Added {creationTime.toLocaleTimeString()}, {creationTime.toLocaleDateString()}</CreationDate>
+              <ButtonContainer>
+                <EditButton onClick={handleShowProductForm} variant="outline-primary">Edit</EditButton>
+                <DeleteButton onClick={() => deleteProduct(product)} align="end" variant="outline-danger">Delete</DeleteButton>
+              </ButtonContainer>
+            </CardFooter>
+        </CardBody>
+    </Card>
+  )
+}
+export default ProductCard
