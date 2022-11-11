@@ -3,6 +3,7 @@ import { Context } from "../../contexts/Context"
 import { Link, useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { Button, Container, Form, Navbar} from 'react-bootstrap';
+import { BsArrowReturnLeft } from 'react-icons/bs';
 import styled from 'styled-components';
 
 const IMGURL = "https://picsum.photos/seed/";
@@ -74,7 +75,6 @@ export function AddMore() {
         creationTime: newCreationTime
       }
     })
-    
 
     submitProducts(completedProducts);
   }
@@ -83,7 +83,7 @@ export function AddMore() {
     <>
       <Navbar bg="light">
         <Container>
-          <Navbar.Brand><HomeLink to="/">Back to Dashboard</HomeLink></Navbar.Brand>
+          <Navbar.Brand><HomeLink to="/"><BsArrowReturnLeft /> Back to Dashboard</HomeLink></Navbar.Brand>
           <Button onClick={addInputs}>more items</Button>
         </Container>
       </Navbar>

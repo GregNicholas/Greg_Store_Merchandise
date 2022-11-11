@@ -69,7 +69,6 @@ app.put('/editProduct/:id', async (req, res, next) => {
 })
 
 app.delete('/deleteProduct/:id', async (req, res, next) => {
-	console.log("Del: ", req.body)
 	try {
 		await client.lRem("products", 1, JSON.stringify(req.body));
 		const data = await client.lRange("products", 0, -1);
@@ -81,9 +80,7 @@ app.delete('/deleteProduct/:id', async (req, res, next) => {
 })
 
 app.delete('/deleteMultipleProducts', async (req, res, next) => {
-	console.log("Delmultiple: ", req.body)
 	try {
-		console.log("hi")
 		await Promise.all(req.body.map(product => {
 			return client.lRem("products", 1, JSON.stringify(product))
 		}));

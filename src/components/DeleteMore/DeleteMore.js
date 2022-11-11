@@ -1,22 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { Context } from "../../contexts/Context"
+import { Context } from '../../contexts/Context';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Container, Form, Navbar} from 'react-bootstrap';
+import { BsArrowReturnLeft } from 'react-icons/bs';
 import styled from 'styled-components';
 
 const HomeLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `
-const FormItem = styled.div`
-  border: 1px solid black;
-  border-radius: 7px;
-  padding: .5rem;
-  margin-bottom: 1rem;
-`
-const FormLabel = styled(Form.Label)`
-  margin-bottom: 0;
-  font-size: 1rem;
+
+const CenterContain = styled(Container)`
+  width: fit-content;
 `
 
 export function DeleteMore() {
@@ -28,12 +23,10 @@ export function DeleteMore() {
 
   const handleChange = (e) => {
     const { value, checked } = e.target;
-           console.log(value)
     // Case 1 : The user checks the box
     if (checked) {
       setDeleteList(prev => [...prev, value]);
     }
-  
     // Case 2  : The user unchecks the box
     else {
       setDeleteList(prev => {
@@ -61,15 +54,15 @@ export function DeleteMore() {
     <>
       <Navbar bg="light">
         <Container>
-          <Navbar.Brand><HomeLink to="/">Back to Dashboard</HomeLink></Navbar.Brand>
+          <Navbar.Brand><HomeLink to="/"><BsArrowReturnLeft /> Back to Dashboard</HomeLink></Navbar.Brand>
         </Container>
       </Navbar>
-      <Container>
+      <CenterContain>
         <Form onSubmit={handleSubmit}>
             {products.map((product) => (
                 <Form.Check 
                   key={product.id}
-                  className="mb-3"
+                  className="mb-2"
                   type="checkbox"
                   id={product.id} 
                   value={product.id}
@@ -80,7 +73,7 @@ export function DeleteMore() {
             <Button type="submit" variant="outline-danger" disabled={deleteList.length === 0}>Delete Checked</Button>
         </Form>
         <Button onClick={() => deleteProducts(products)} variant="danger" className="mt-3">DELETE ALL</Button>
-      </Container>
+      </CenterContain>
     </>
   )
 }

@@ -21,7 +21,6 @@ function ContextProvider({ children }) {
 	}
 
     const addMultipleProducts = async (newProducts) => {
-        console.log("in context multiple: ", newProducts)
             setLoadingStatus({status: 'loading', error: ''});
             try {
             // map the new products in a Promise.all 
@@ -91,7 +90,6 @@ function ContextProvider({ children }) {
 			setLoadingStatus({status: 'loading', error: ''});
 			try {
 				const { data } = await axios.get("/getProducts");
-				console.log(data)
 				if(data.length > 0){
 					const productsInfo = data;
 					setProducts(productsInfo);

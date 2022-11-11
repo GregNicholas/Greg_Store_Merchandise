@@ -1,31 +1,6 @@
 import { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 
-const DisplayArea = ({ children, loadingStatus }) => {
-  const [isShown, setIsShown] = useState(false);
-
-  // work around for empty list message flashing. look into other fix
-  useEffect(() => {
-    if(!children.length && loadingStatus.status === ''){
-      setTimeout(() => {
-        setIsShown(true)
-      },800)
-    }
-  },[children, loadingStatus.status])
-
-  return (
-    <Container>
-      <CardsDisplay>
-        {(loadingStatus.status === '' && children.length) && children }
-        {loadingStatus.status === 'loading' && <div>LOADING...</div>}
-        {loadingStatus.status === 'error' && <div>Error {loadingStatus.error.message}</div>}
-        {(loadingStatus.status === '' && !children.length && isShown) && <EmptyList><p>Nothing to show</p>Use the menu to add some products</EmptyList>}
-      </CardsDisplay>
-    </Container>
-  )
-}
-export default DisplayArea
-
 const Container = styled.main`
   max-width: 1200px;
   margin: 0 auto;
@@ -58,3 +33,28 @@ const EmptyList = styled.div`
   margin-top: 5rem;
   animation: ${pulse} .5s;
 `;
+
+const DisplayArea = ({ children, loadingStatus }) => {
+  const [isShown, setIsShown] = useState(false);
+
+  // work around for empty list message flashing. look into other fix
+  useEffect(() => {
+    if(!children.length && loadingStatus.status === ''){
+      setTimeout(() => {
+        setIsShown(true)
+      },800)
+    }
+  },[children, loadingStatus.status])
+
+  return (
+    <Container>
+      <CardsDisplay>
+        {(loadingStatus.status === '' && children.length) && children }
+        {loadingStatus.status === 'loading' && <div>LOADING...</div>}
+        {loadingStatus.status === 'error' && <div>Error {loadingStatus.error.message}</div>}
+        {(loadingStatus.status === '' && !children.length && isShown) && <EmptyList><p>Nothing to show</p>Use the menu to add some products</EmptyList>}
+      </CardsDisplay>
+    </Container>
+  )
+}
+export default DisplayArea
